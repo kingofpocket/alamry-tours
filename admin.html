@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin | Alamry Tours and Travel</title>
+<style>
+:root{--navy:#0E2A47;--sea:#12A3A0;--sand:#E9B44C;--mist:#F3F6F9;--ink:#13202E;--red:#c0392b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--mist);color:var(--ink);line-height:1.5}
+header{background:var(--navy);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+header b span{color:var(--sand)}
+main{max-width:900px;margin:0 auto;padding:20px}
+.box{background:#fff;border-radius:12px;padding:20px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+h2{color:var(--navy);margin-bottom:12px;font-size:1.25rem}
+h3{font-size:1.05rem}
+label{display:grid;gap:5px;font-weight:600;font-size:.9rem;margin-bottom:12px}
+input,select,textarea{padding:10px 12px;border:1.5px solid #c5d1dc;border-radius:8px;font:inherit;width:100%;background:#fff}
+textarea{min-height:80px;resize:vertical}
+button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:10px 18px;cursor:pointer;background:var(--navy);color:#fff}
+button.sec{background:#e3e9ef;color:var(--ink)}
+button.del{background:var(--red)}
+button.ok{background:var(--sea)}
+button:disabled{opacity:.5}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.tabs button{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+.tabs button.on{background:var(--navy);color:#fff}
+.item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #e3e9ef;flex-wrap:wrap}
+.item:last-child{border-bottom:0}
+.item small{color:#586877;display:block}
+.tag{font-size:.78rem;padding:2px 10px;border-radius:99px;background:#d7f3f2;color:#0a6f6d;font-weight:600}
+.tag.off{background:#f6d9d5;color:var(--red)}
+.btns{display:flex;gap:6px;flex-wrap:wrap}
+.btns button{padding:6px 12px;font-size:.85rem}
+.media{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.media figure{background:var(--mist);border-radius:10px;overflow:hidden}
+.media img,.media video{width:100%;height:120px;object-fit:cover;display:block}
+.media figcaption{padding:8px;font-size:.85rem}
+.media .btns{padding:0 8px 8px}
+#msg{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 20px;border-radius:99px;display:none;z-index:9}
+#msg.err{background:var(--red)}
+[hidden]{display:none!important}
+@media(max-width:600px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <b>Alamry <span>Admin</span></b>
+  <button class="sec" id="logout" hidden>Log out</button>
+</header>
+
+<main>
+  <div class="box" id="setupWarn" hidden>
+    <h2>Not connected yet</h2>
+    <p>Open <b>config.js</b> and paste your Supabase project URL and anon key.</p>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="box" id="loginBox" hidden style="max-width:420px;margin:40px auto">
+    <h2>Admin login</h2>
+    <form id="loginForm">
+      <label>Email<input type="email" id="email" required autocomplete="username"></label>
+      <label>Password<input type="password" id="password" required autocomplete="current-password"></label>
+      <button type="submit">Log in</button>
+    </form>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="app" hidden>
+    <div class="tabs">
+      <button data-t="jobs" class="on">Jobs</button>
+      <button data-t="gallery">Photos & videos</button>
+      <button data-t="settings">Site details</button>
+    </div>
+
+    <!-- JOBS -->
+    <section id="t-jobs">
+      <div class="box">
+        <h2 id="jobFormTitle">Add a job</h2>
+        <form id="jobForm">
+          <input type="hidden" id="jobId">
+          <div class="row">
+            <label>Job title<input id="jTitle" required placeholder="e.g. Hotel housekeeper"></label>
+            <label>Country
+              <select id="jCountry">
+                <option>Qatar</option><option>Saudi Arabia</option><option>UAE (Dubai)</option><option>Oman</option>
+                <option>Kuwait</option><option>Bahrain</option><option>Australia</option><option>Europe</option><option>Asia</option>
+              </select>
+            </label>
+          </div>
+          <div class="row">
+            <label>Category<input id="jCategory" placeholder="e.g. Hospitality, Nursing, Driver"></label>
+            <label>Salary (optional)<input id="jSalary" placeholder="e.g. QAR 1,200 per month"></label>
+          </div>
+          <label>Details<textarea id="jDesc" placeholder="Requirements, contract length, benefits..."></textarea></label>
+          <div class="btns">
+            <button type="submit" id="jobSave">Save job</button>
+            <button type="button" class="sec" id="jobCancel" hidden>Cancel edit</button>
+          </div>
+        </form>
+      </div>
+      <div class="box">
+        <h2>Your jobs</h2>
+        <div id="jobList"></div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="t-gallery" hidden>
+      <div class="box">
+        <h2>Upload photo or video</h2>
+        <form id="mediaForm">
+          <label>File<input type="file" id="mFile" accept="image/*,video/*" required></label>
+          <label>Caption<input id="mCaption" placeholder="e.g. Departure day at JKIA"></label>
+          <button type="submit" id="mediaSave">Upload</button>
+          <p style="font-size:.85rem;color:#586877;margin-top:8px">Photos are resized automatically. Videos must be under 50 MB. Only post people who agreed to be shown.</p>
+        </form>
+      </div>
+      <div class="box">
+        <h2>Gallery</h2>
+        <div class="media" id="mediaList"></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="t-settings" hidden>
+      <div class="box">
+        <h2>Site details</h2>
+        <p style="margin-bottom:14px;color:#586877">Leave a box empty to keep the default text on the website.</p>
+        <form id="setForm">
+          <label>WhatsApp number (digits only, e.g. 254181308652)<input data-k="whatsapp"></label>
+          <div class="row">
+            <label>Phone shown in footer<input data-k="phone" placeholder="+254 181 308 652"></label>
+            <label>Email<input data-k="email" type="email"></label>
+          </div>
+          <label>Address<input data-k="address"></label>
+          <label>Homepage headline<input data-k="hero_title"></label>
+          <label>Homepage text<textarea data-k="hero_text"></textarea></label>
+          <label>NEA licence number (shown in footer once added)<input data-k="nea_license"></label>
+          <button type="submit">Save details</button>
+        </form>
+      </div>
+    </section>
+  </div>
+</main>
+<div id="msg"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(t, err) {
+  const m = $("#msg"); m.textContent = t; m.className = err ? "err" : ""; m.style.display = "block";
+  clearTimeout(toast.t); toast.t = setTimeout(() => m.style.display = "none", 3500);
+}
+
+if (SB_URL.startsWith("PASTE")) { $("#setupWarn").hidden = false; throw new Error("config.js not filled in"); }
+const sb = supabase.createClient(SB_URL, SB_KEY);
+
+/* ---------- auth ---------- */
+async function refresh() {
+  const { data: { session } } = await sb.auth.getSession();
+  $("#loginBox").hidden = !!session;
+  $("#app").hidden = !session;
+  $("#logout").hidden = !session;
+  if (session) { loadJobs(); loadMedia(); loadSettings(); }
+}
+$("#loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const { error } = await sb.auth.signInWithPassword({ email: $("#email").value.trim(), password: $("#password").value });
+  if (error) return toast("Login failed: " + error.message, true);
+  refresh();
+});
+$("#logout").addEventListener("click", async () => { await sb.auth.signOut(); refresh(); });
+
+document.querySelectorAll(".tabs button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".tabs button").forEach(x => x.classList.toggle("on", x === b));
+  ["jobs", "gallery", "settings"].forEach(t => $("#t-" + t).hidden = t !== b.dataset.t);
+}));
+
+/* ---------- jobs ---------- */
+let jobs = [];
+async function loadJobs() {
+  const { data, error } = await sb.from("jobs").select("*").order("created_at", { ascending: false });
+  if (error) return toast(error.message, true);
+  jobs = data;
+  $("#jobList").innerHTML = jobs.length ? jobs.map(j => `
+    <div class="item">
+      <div>
+        <h3>${esc(j.title)} <span class="tag ${j.is_open ? "" : "off"}">${j.is_open ? "Open" : "Closed"}</span></h3>
+        <small>${esc(j.country)}${j.category ? " · " + esc(j.category) : ""}${j.salary ? " · " + esc(j.salary) : ""}</small>
+      </div>
+      <div class="btns" data-id="${j.id}">
+        <button class="sec" data-a="toggle">${j.is_open ? "Close" : "Reopen"}</button>
+        <button class="sec" data-a="edit">Edit</button>
+        <button class="del" data-a="del">Delete</button>
+      </div>
+    </div>`).join("") : "<p>No jobs yet. Add your first one above.</p>";
+}
+function resetJobForm() {
+  $("#jobForm").reset(); $("#jobId").value = "";
+  $("#jobFormTitle").textContent = "Add a job"; $("#jobCancel").hidden = true;
+}
+$("#jobCancel").addEventListener("click", resetJobForm);
+$("#jobForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const row = { title: $("#jTitle").value.trim(), country: $("#jCountry").value, category: $("#jCategory").value.trim() || null,
+                salary: $("#jSalary").value.trim() || null, description: $("#jDesc").value.trim() || null };
+  const id = $("#jobId").value;
+  const { error } = id ? await sb.from("jobs").update(row).eq("id", id) : await sb.from("jobs").insert(row);
+  if (error) return toast(error.message, true);
+  toast("Job saved"); resetJobForm(); loadJobs();
+});
+$("#jobList").addEventListener("click", async e => {
+  const a = e.target.dataset.a; if (!a) return;
+  const id = e.target.closest("[data-id]").dataset.id, j = jobs.find(x => x.id === id);
+  if (a === "toggle") {
+    const { error } = await sb.from("jobs").update({ is_open: !j.is_open }).eq("id", id);
+    if (error) return toast(error.message, true); loadJobs();
+  } else if (a === "edit") {
+    $("#jobId").value = id; $("#jTitle").value = j.title; $("#jCountry").value = j.country;
+    $("#jCategory").value = j.category || ""; $("#jSalary").value = j.salary || ""; $("#jDesc").value = j.description || "";
+    $("#jobFormTitle").textContent = "Edit job"; $("#jobCancel").hidden = false; scrollTo({ top: 0, behavior: "smooth" });
+  } else if (a === "del") {
+    if (!confirm("Delete this job?")) return;
+    const { error } = await sb.from("jobs").delete().eq("id", id);
+    if (error) return toast(error.message, true); toast("Deleted"); loadJobs();
+  }
+});
+
+/* ---------- gallery ---------- */
+let media = [];
+async function loadMedia() {
+  const { data, error } = await sb.from("media").select("*").order("created_at", { ascending: false });
+  if (error) return toast(error.message, true);
+  media = data;
+  $("#mediaList").innerHTML = media.length ? media.map(m => `
+    <figure>
+      ${m.kind === "video" ? `<video src="${esc(m.url)}" muted preload="metadata"></video>` : `<img src="${esc(m.url)}" alt="">`}
+      <figcaption>${esc(m.caption || "No caption")}</figcaption>
+      <div class="btns" data-id="${m.id}"><button class="del" data-a="delmedia">Delete</button></div>
+    </figure>`).join("") : "<p>Nothing uploaded yet.</p>";
+}
+async function shrink(file) {
+  if (!file.type.startsWith("image/")) return file;
+  const img = await createImageBitmap(file), sc = Math.min(1, 1600 / Math.max(img.width, img.height));
+  const c = document.createElement("canvas"); c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+  c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+  return new Promise(r => c.toBlob(r, "image/jpeg", .82));
+}
+$("#mediaForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const file = $("#mFile").files[0]; if (!file) return;
+  const isVideo = file.type.startsWith("video/");
+  if (isVideo && file.size > 50 * 1024 * 1024) return toast("Video is over 50 MB. Compress it first.", true);
+  const btn = $("#mediaSave"); btn.disabled = true; btn.textContent = "Uploading...";
+  try {
+    const blob = await shrink(file);
+    const ext = isVideo ? (file.name.split(".").pop() || "mp4").toLowerCase() : "jpg";
+    const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const up = await sb.storage.from("media").upload(path, blob, { contentType: isVideo ? file.type : "image/jpeg" });
+    if (up.error) throw up.error;
+    const url = sb.storage.from("media").getPublicUrl(path).data.publicUrl;
+    const ins = await sb.from("media").insert({ kind: isVideo ? "video" : "photo", url, path, caption: $("#mCaption").value.trim() || null });
+    if (ins.error) throw ins.error;
+    toast("Uploaded"); $("#mediaForm").reset(); loadMedia();
+  } catch (err) { toast("Upload failed: " + err.message, true); }
+  btn.disabled = false; btn.textContent = "Upload";
+});
+$("#mediaList").addEventListener("click", async e => {
+  if (e.target.dataset.a !== "delmedia") return;
+  if (!confirm("Delete this file?")) return;
+  const id = e.target.closest("[data-id]").dataset.id, m = media.find(x => x.id === id);
+  await sb.storage.from("media").remove([m.path]);
+  const { error } = await sb.from("media").delete().eq("id", id);
+  if (error) return toast(error.message, true); toast("Deleted"); loadMedia();
+});
+
+/* ---------- settings ---------- */
+async function loadSettings() {
+  const { data } = await sb.from("settings").select("*");
+  const s = Object.fromEntries((data || []).map(r => [r.key, r.value]));
+  document.querySelectorAll("[data-k]").forEach(i => i.value = s[i.dataset.k] || "");
+}
+$("#setForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const rows = [...document.querySelectorAll("[data-k]")].map(i => ({ key: i.dataset.k, value: i.value.trim() }));
+  const { error } = await sb.from("settings").upsert(rows);
+  if (error) return toast(error.message, true); toast("Saved");
+});
+
+refresh();
+</script>
+</body>
+</html>
