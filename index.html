@@ -6,11 +6,11 @@
 <title>Alamry Tours and Travel | Jobs Abroad from Kenya – Qatar, Saudi, UAE, Oman & Europe</title>
 <meta name="description" content="Looking for a job outside Kenya? Alamry Tours and Travel connects Kenyans with trusted agencies for work in Qatar, Saudi Arabia, Dubai (UAE), Oman, Kuwait, Europe and Asia. Apply on WhatsApp today.">
 <meta name="keywords" content="jobs abroad Kenya, work in Qatar from Kenya, jobs in Saudi Arabia for Kenyans, Dubai jobs Kenya, Oman jobs, overseas recruitment agency Kenya, travel agency Nairobi">
-<link rel="canonical" href="https://www.alamrytours.co.ke/">
+<link rel="canonical" href="https://alamrytoursandtravel.com/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Alamry Tours and Travel – Work Abroad from Kenya">
 <meta property="og:description" content="Verified overseas job opportunities for Kenyans in the Gulf, Europe, Australia and Asia.">
-<meta property="og:image" content="https://www.alamrytours.co.ke/images/hero.jpg">
+<meta property="og:image" content="https://alamrytoursandtravel.com/images/hero.jpg">
 <meta name="theme-color" content="#0E2A47">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +21,7 @@
  "@context":"https://schema.org",
  "@type":"TravelAgency",
  "name":"Alamry Tours and Travel",
- "url":"https://www.alamrytours.co.ke/",
+ "url":"https://alamrytoursandtravel.com/",
  "description":"Overseas employment and travel assistance for Kenyans seeking work in the Gulf, Europe, Australia and Asia.",
  "areaServed":"KE",
  "address":{"@type":"PostalAddress","streetAddress":"Summit House, Moi Avenue","addressLocality":"Nairobi","addressCountry":"KE"},
@@ -130,6 +130,9 @@ input,select,textarea{padding:12px 14px;border:1.5px solid #c5d1dc;border-radius
 
 footer{background:#091c31;color:#b8c8d8;padding:36px 0;font-size:.92rem}
 footer a{color:var(--sand)}
+a.card{display:block;text-decoration:none;color:inherit;transition:transform .15s}
+a.card:hover{transform:translateY(-3px)}
+.more{display:block;margin-top:10px;font-weight:600;color:var(--sea)}
 .card .btn{margin-top:12px;font-size:.9rem;padding:9px 16px}
 .gallery video{width:100%;height:100%;object-fit:cover}
 .gallery figcaption{pointer-events:none}
@@ -300,6 +303,7 @@ footer a{color:var(--sand)}
 <footer>
   <div class="wrap">
     <p><b>Alamry Tours and Travel</b> · <span id="ftAddress">Summit House, Moi Avenue, Nairobi, Kenya</span></p>
+    <p>Jobs: <a href="jobs-in-qatar.html">Qatar</a> · <a href="jobs-in-saudi-arabia.html">Saudi Arabia</a> · <a href="jobs-in-dubai-uae.html">Dubai (UAE)</a> · <a href="jobs-in-oman.html">Oman</a> · <a href="jobs-in-kuwait.html">Kuwait</a> · <a href="jobs-in-bahrain.html">Bahrain</a> · <a href="jobs-in-australia.html">Australia</a> · <a href="jobs-in-europe.html">Europe</a> · <a href="jobs-in-asia.html">Asia</a></p>
     <p>Phone: <a id="ftPhone" href="tel:+254181308652">+254 181 308 652</a> · Email: <a id="ftEmail" href="mailto:mohasuleiman03@icloud.com">mohasuleiman03@icloud.com</a></p>
     <p><span id="ftLicence"></span>© <span id="yr"></span> Alamry Tours and Travel</p>
   </div>
@@ -312,20 +316,21 @@ footer a{color:var(--sand)}
 let WHATSAPP = "254181308652"; // your number, no + or spaces
 
 const countries = [
-  {n:"Qatar", r:"Gulf", t:"Hospitality, security, cleaning, drivers"},
-  {n:"Saudi Arabia", r:"Gulf", t:"Nursing, domestic work, drivers, construction, caregiving"},
-  {n:"UAE (Dubai)", r:"Gulf", t:"Hotels, retail, security, cleaning"},
-  {n:"Oman", r:"Gulf", t:"Hospitality, nursing, domestic work, retail"},
-  {n:"Kuwait", r:"Gulf", t:"Domestic work, drivers, cleaning"},
-  {n:"Poland / Romania", r:"Europe", t:"Warehouse, factory, farm and logistics"},
-  {n:"Australia", r:"Australia", t:"Nursing, aged care, hospitality, farm work"},
-  {n:"Malaysia", r:"Asia", t:"Factory, plantation, hospitality"}
+  {n:"Qatar", r:"Gulf", u:"jobs-in-qatar.html", t:"Hospitality, security, cleaning, drivers"},
+  {n:"Saudi Arabia", r:"Gulf", u:"jobs-in-saudi-arabia.html", t:"Nursing, domestic work, drivers, construction, caregiving"},
+  {n:"UAE (Dubai)", r:"Gulf", u:"jobs-in-dubai-uae.html", t:"Hotels, retail, security, cleaning"},
+  {n:"Oman", r:"Gulf", u:"jobs-in-oman.html", t:"Hospitality, nursing, domestic work, retail"},
+  {n:"Kuwait", r:"Gulf", u:"jobs-in-kuwait.html", t:"Domestic work, drivers, cleaning"},
+  {n:"Bahrain", r:"Gulf", u:"jobs-in-bahrain.html", t:"Hospitality, domestic work, cleaning, retail"},
+  {n:"Poland / Romania", r:"Europe", u:"jobs-in-europe.html", t:"Warehouse, factory, farm and logistics"},
+  {n:"Australia", r:"Australia", u:"jobs-in-australia.html", t:"Nursing, aged care, hospitality, farm work"},
+  {n:"Malaysia", r:"Asia", u:"jobs-in-asia.html", t:"Factory, plantation, hospitality"}
 ];
 
 const grid = document.getElementById("countryGrid");
 function render(r){
   grid.innerHTML = countries.filter(c => r==="all" || c.r===r)
-    .map(c => `<div class="card"><small>${c.r}</small><h3>${c.n}</h3><p>${c.t}</p></div>`).join("");
+    .map(c => `<a class="card" href="${c.u}"><small>${c.r}</small><h3>${c.n}</h3><p>${c.t}</p><span class="more">See jobs in ${c.n} →</span></a>`).join("");
 }
 render("all");
 document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => {

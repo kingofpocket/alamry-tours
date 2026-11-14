@@ -55,7 +55,7 @@ button:disabled{opacity:.5}
 <main>
   <div class="box" id="setupWarn" hidden>
     <h2>Not connected yet</h2>
-    <p>Open <b>config.js</b> and paste your Supabase project URL and anon key.</p>
+    <p>Open <b>config.js</b> and paste your Supabase project URL and anon key. Then open this page from the same folder as <b>config.js</b> (use Live Server in VS Code). Opening only this file in a preview will not work.</p>
   </div>
 
   <!-- LOGIN -->
@@ -86,8 +86,7 @@ button:disabled{opacity:.5}
             <label>Job title<input id="jTitle" required placeholder="e.g. Hotel housekeeper"></label>
             <label>Country
               <select id="jCountry">
-                <option>Qatar</option><option>Saudi Arabia</option><option>UAE (Dubai)</option><option>Oman</option>
-                <option>Kuwait</option><option>Bahrain</option><option>Australia</option><option>Europe</option><option>Asia</option>
+                <option>Qatar</option><option>Saudi Arabia</option><option>UAE (Dubai)</option><option>Oman</option><option>Kuwait</option><option>Bahrain</option><option>Australia</option><option>Poland</option><option>Romania</option><option>Europe</option><option>Malaysia</option><option>Asia</option>
               </select>
             </label>
           </div>
@@ -158,7 +157,7 @@ function toast(t, err) {
   clearTimeout(toast.t); toast.t = setTimeout(() => m.style.display = "none", 3500);
 }
 
-if (SB_URL.startsWith("PASTE")) { $("#setupWarn").hidden = false; throw new Error("config.js not filled in"); }
+if (typeof SB_URL === "undefined" || SB_URL.startsWith("PASTE") || typeof supabase === "undefined") { $("#setupWarn").hidden = false; throw new Error("config.js not filled in"); }
 const sb = supabase.createClient(SB_URL, SB_KEY);
 
 /* ---------- auth ---------- */
