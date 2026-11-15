@@ -55,3 +55,4 @@ footer a{color:var(--sand)}
 .wa{position:fixed;right:18px;bottom:18px;z-index:30;background:#25D366;color:#fff;border-radius:999px;padding:14px 20px;font-weight:600;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 @media(max-width:700px){.links a:not(.btn){display:none}section{padding:44px 0}}
 [hidden]{display:none!important}
+[id]{scroll-margin-top:72px}

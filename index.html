@@ -47,6 +47,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
+[id]{scroll-margin-top:72px}
 body{font-family:"Source Sans 3",system-ui,sans-serif;color:var(--ink);line-height:1.6;background:var(--white)}
 h1,h2,h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.15;letter-spacing:-.01em}
 a{color:inherit}
@@ -303,7 +304,7 @@ a.card:hover{transform:translateY(-3px)}
 <footer>
   <div class="wrap">
     <p><b>Alamry Tours and Travel</b> · <span id="ftAddress">Summit House, Moi Avenue, Nairobi, Kenya</span></p>
-    <p>Jobs: <a href="jobs-in-qatar.html">Qatar</a> · <a href="jobs-in-saudi-arabia.html">Saudi Arabia</a> · <a href="jobs-in-dubai-uae.html">Dubai (UAE)</a> · <a href="jobs-in-oman.html">Oman</a> · <a href="jobs-in-kuwait.html">Kuwait</a> · <a href="jobs-in-bahrain.html">Bahrain</a> · <a href="jobs-in-australia.html">Australia</a> · <a href="jobs-in-europe.html">Europe</a> · <a href="jobs-in-asia.html">Asia</a></p>
+    <p>Jobs: <a href="/jobs-in-qatar">Qatar</a> · <a href="/jobs-in-saudi-arabia">Saudi Arabia</a> · <a href="/jobs-in-dubai-uae">Dubai (UAE)</a> · <a href="/jobs-in-oman">Oman</a> · <a href="/jobs-in-kuwait">Kuwait</a> · <a href="/jobs-in-bahrain">Bahrain</a> · <a href="/jobs-in-australia">Australia</a> · <a href="/jobs-in-europe">Europe</a> · <a href="/jobs-in-asia">Asia</a></p>
     <p>Phone: <a id="ftPhone" href="tel:+254181308652">+254 181 308 652</a> · Email: <a id="ftEmail" href="mailto:mohasuleiman03@icloud.com">mohasuleiman03@icloud.com</a></p>
     <p><span id="ftLicence"></span>© <span id="yr"></span> Alamry Tours and Travel</p>
   </div>
@@ -316,15 +317,15 @@ a.card:hover{transform:translateY(-3px)}
 let WHATSAPP = "254181308652"; // your number, no + or spaces
 
 const countries = [
-  {n:"Qatar", r:"Gulf", u:"jobs-in-qatar.html", t:"Hospitality, security, cleaning, drivers"},
-  {n:"Saudi Arabia", r:"Gulf", u:"jobs-in-saudi-arabia.html", t:"Nursing, domestic work, drivers, construction, caregiving"},
-  {n:"UAE (Dubai)", r:"Gulf", u:"jobs-in-dubai-uae.html", t:"Hotels, retail, security, cleaning"},
-  {n:"Oman", r:"Gulf", u:"jobs-in-oman.html", t:"Hospitality, nursing, domestic work, retail"},
-  {n:"Kuwait", r:"Gulf", u:"jobs-in-kuwait.html", t:"Domestic work, drivers, cleaning"},
-  {n:"Bahrain", r:"Gulf", u:"jobs-in-bahrain.html", t:"Hospitality, domestic work, cleaning, retail"},
-  {n:"Poland / Romania", r:"Europe", u:"jobs-in-europe.html", t:"Warehouse, factory, farm and logistics"},
-  {n:"Australia", r:"Australia", u:"jobs-in-australia.html", t:"Nursing, aged care, hospitality, farm work"},
-  {n:"Malaysia", r:"Asia", u:"jobs-in-asia.html", t:"Factory, plantation, hospitality"}
+  {n:"Qatar", r:"Gulf", u:"/jobs-in-qatar", t:"Hospitality, security, cleaning, drivers"},
+  {n:"Saudi Arabia", r:"Gulf", u:"/jobs-in-saudi-arabia", t:"Nursing, domestic work, drivers, construction, caregiving"},
+  {n:"UAE (Dubai)", r:"Gulf", u:"/jobs-in-dubai-uae", t:"Hotels, retail, security, cleaning"},
+  {n:"Oman", r:"Gulf", u:"/jobs-in-oman", t:"Hospitality, nursing, domestic work, retail"},
+  {n:"Kuwait", r:"Gulf", u:"/jobs-in-kuwait", t:"Domestic work, drivers, cleaning"},
+  {n:"Bahrain", r:"Gulf", u:"/jobs-in-bahrain", t:"Hospitality, domestic work, cleaning, retail"},
+  {n:"Poland / Romania", r:"Europe", u:"/jobs-in-europe", t:"Warehouse, factory, farm and logistics"},
+  {n:"Australia", r:"Australia", u:"/jobs-in-australia", t:"Nursing, aged care, hospitality, farm work"},
+  {n:"Malaysia", r:"Asia", u:"/jobs-in-asia", t:"Factory, plantation, hospitality"}
 ];
 
 const grid = document.getElementById("countryGrid");
@@ -360,5 +361,6 @@ document.getElementById("yr").textContent = new Date().getFullYear();
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="config.js"></script>
 <script src="site.js"></script>
+<script src="nav.js"></script>
 </body>
 </html>
